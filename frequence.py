@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import pandas as pd
+import argparse
 
 def suffix_freq(df: pd.DataFrame, suffix: str):
 	fem_sing = df[(df["genre"] == "f") & (df["nombre"] == "s")]
@@ -13,9 +14,13 @@ def suffix_freq(df: pd.DataFrame, suffix: str):
 
 
 def main():
+	parser = argparse.ArgumentParser("frequence")
+	parser.add_argument("lexique", help="Le chemin de la base de donnée Lexisque au format .tsv", type=str)
+	args = parser.parse_args()
+
 	pd.set_option("display.max_rows", None)
 
-	df = pd.read_csv("./Lexique383/Lexique383.tsv", sep="\t")
+	df = pd.read_csv(args.lexique, sep="\t")
 	in_df = suffix_freq(df, "in")
 	en_df = suffix_freq(df, "En")
 	print(f"in: {in_df['freq'].sum()}\nain/ien/ein: {en_df['freq'].sum()}")
