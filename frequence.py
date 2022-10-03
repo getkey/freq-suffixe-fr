@@ -2,6 +2,7 @@
 
 import pandas as pd
 import argparse
+import os
 
 def suffix_freq(df: pd.DataFrame, suffix: str):
 	fem_sing = df[(df["genre"] == "f") & (df["nombre"] == "s")]
@@ -14,8 +15,15 @@ def suffix_freq(df: pd.DataFrame, suffix: str):
 
 
 def main():
+	env_lexique_tsv = os.environ.get("LEXIQUE_TSV")
 	parser = argparse.ArgumentParser("frequence")
-	parser.add_argument("lexique", help="Le chemin de la base de donnée Lexisque au format .tsv", type=str)
+	parser.add_argument(
+		"lexique",
+		help="Chemin de la base de donnée Lexique au format .tsv.\nIl peut aussi être fourni par la variable d'environnement $LEXIQUE_TSV.",
+		type=str,
+		default=env_lexique_tsv,
+		nargs=("?" if env_lexique_tsv else None), # optional if env var is set ( in which case it will use the default)
+	)
 	args = parser.parse_args()
 
 	pd.set_option("display.max_rows", None)
